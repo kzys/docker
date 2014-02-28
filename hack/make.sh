@@ -86,6 +86,20 @@ LDFLAGS='-X github.com/dotcloud/docker/dockerversion.GITCOMMIT "'$GITCOMMIT'" -X
 LDFLAGS_STATIC='-X github.com/dotcloud/docker/dockerversion.IAMSTATIC true -linkmode external -extldflags "-lpthread -static -Wl,--unresolved-symbols=ignore-in-object-files"'
 BUILDFLAGS='-tags netgo -a'
 
+if [ $(uname) = 'FreeBSD' ]; then
+    # Let's assume that SQLite is installed from Ports
+    export CGO_CFLAGS='-I/usr/local/include'
+    export CGO_LDFLAGS='-L/usr/local/lib'
+
+    # Tell cgo the compiler is Clang, not GCC
+    # https://code.google.com/p/go/source/browse/src/cmd/cgo/gcc.go?spec=svne77e74371f2340ee08622ce602e9f7b15f29d8d3&r=e6794866ebeba2bf8818b9261b54e2eef1c9e588#752
+    export CC=clang
+
+    # "-extld clang" is a workaround for
+    # https://code.google.com/p/go/issues/detail?id=6845
+    LDFLAGS="$LDFLAGS -extld clang"
+fi
+
 HAVE_GO_TEST_COVER=
 if \
 	go help testflag | grep -- -cover > /dev/null \
