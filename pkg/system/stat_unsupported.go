@@ -4,10 +4,10 @@ package system
 
 import "syscall"
 
-func getLastAccess(stat *syscall.Stat_t) syscall.Timespec {
+func GetLastAccess(stat *syscall.Stat_t) syscall.Timespec {
 	return stat.Atimespec
 }
 
-func getLastModification(stat *syscall.Stat_t) syscall.Timespec {
+func GetLastModification(stat *syscall.Stat_t) syscall.Timespec {
 	return stat.Mtimespec
 }

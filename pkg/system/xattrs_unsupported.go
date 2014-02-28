@@ -2,8 +2,6 @@
 
 package system
 
-import "syscall"
-
 func Lgetxattr(path string, attr string) ([]byte, error) {
 	return nil, ErrNotImplemented
 }
