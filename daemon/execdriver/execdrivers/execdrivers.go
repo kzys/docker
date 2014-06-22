@@ -3,6 +3,7 @@ package execdrivers
 import (
 	"fmt"
 	"github.com/dotcloud/docker/daemon/execdriver"
+	"github.com/dotcloud/docker/daemon/execdriver/jail"
 	"github.com/dotcloud/docker/daemon/execdriver/lxc"
 	"github.com/dotcloud/docker/daemon/execdriver/native"
 	"github.com/dotcloud/docker/pkg/sysinfo"
@@ -18,6 +19,8 @@ func NewDriver(name, root, initPath string, sysInfo *sysinfo.SysInfo) (execdrive
 		return lxc.NewDriver(root, sysInfo.AppArmor)
 	case "native":
 		return native.NewDriver(path.Join(root, "execdriver", "native"), initPath)
+	case "jail":
+		return jail.NewDriver(path.Join(root, "execdriver", "jail"), initPath)
 	}
 	return nil, fmt.Errorf("unknown exec driver %s", name)
 }
